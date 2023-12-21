@@ -16,6 +16,6 @@ app.use("/api/v1/auth", auth);
 
 app.use(errorMiddleware)
 
-app.listen(5656, () => {
+app.listen(5003, () => {
   console.log("Server is running on port 5656");
 });

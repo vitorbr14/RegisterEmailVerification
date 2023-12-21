@@ -1,0 +1,26 @@
+<!-- 1- Configuração inicial: Configure seu servidor Express e conecte-se ao seu banco de dados.
+
+2- Modelo de usuário: Crie um modelo de usuário com campos para email, senha e isActivated. Inicialmente, isActivated deve ser definido como false. -->
+
+3 - Registro de usuário:
+<!-- Crie uma rota para registrar novos usuários. -->
+<!-- Quando um novo usuário se registra, crie um novo documento de usuário com o email e a senha fornecidos (certifique-se de fazer hash da senha antes de armazená-la). -->
+Gere um token JWT e envie um email de verificação para o usuário com o token no link.
+
+4 - Verificação de email:
+Crie uma rota que será acionada quando o usuário clicar no link de verificação.
+Quando o link de verificação é clicado, defina isActivated como true para o usuário correspondente.
+Login do usuário:
+
+5- Crie uma rota para login do usuário.
+Quando um usuário tenta fazer login, verifique se o email existe no banco de dados.
+Se o email existir, verifique se a senha fornecida corresponde à senha armazenada no banco de dados (após a descriptografia).
+Verifique o campo isActivated. Se isActivated for false, recuse o login com uma mensagem informando que a conta ainda não foi ativada.
+Se a senha estiver correta e isActivated for true, permita o login e envie o token JWT na resposta.
+
+6- Middleware de autenticação:
+Crie um middleware que verifica o token JWT em cada solicitação para rotas autenticadas.
+Se o token estiver ausente ou for inválido, recuse a solicitação.
+Se o token for válido, permita que a solicitação prossiga.
+Rotas autenticadas:
+Agora você pode criar rotas que exigem autenticação. Use o middleware de autenticação que você criou para proteger essas rotas.
