@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 import { BadRequestError } from "../errors/api-errors";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { createToken } from "../utils/createToken";
 
 export const register = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
@@ -36,14 +37,9 @@ export const register = async (req: Request, res: Response) => {
     throw new BadRequestError("Não foi possivel criar um novo usuário.");
   }
 
-  //JWT
-  const tokenJwt = jwt.sign(
-    { user_id: newUser.id },
-    process.env.JWT_PASS ?? "",
-    { expiresIn: "1h" }
-  );
-
-  res.json(tokenJwt);
+  //Create JWT Token
+  const token = createToken(newUser);
+  res.json(token);
 };
 
 export const login = async (req: Request, res: Response) => {

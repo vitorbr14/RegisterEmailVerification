@@ -3,9 +3,13 @@
 2- Modelo de usuário: Crie um modelo de usuário com campos para email, senha e isActivated. Inicialmente, isActivated deve ser definido como false. -->
 
 3 - Registro de usuário:
+
 <!-- Crie uma rota para registrar novos usuários. -->
 <!-- Quando um novo usuário se registra, crie um novo documento de usuário com o email e a senha fornecidos (certifique-se de fazer hash da senha antes de armazená-la). -->
-Gere um token JWT e envie um email de verificação para o usuário com o token no link.
+
+<!-- Gere um token JWT -->
+
+envie um email de verificação para o usuário com o token no link.
 
 4 - Verificação de email:
 Crie uma rota que será acionada quando o usuário clicar no link de verificação.
