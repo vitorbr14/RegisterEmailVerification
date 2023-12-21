@@ -5,6 +5,23 @@ import { BadRequestError } from "../errors/api-errors";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { createToken } from "../utils/createToken";
+import nodemailer from "nodemailer";
+
+import {
+  Transporter as NodeMailerTransporter,
+  SentMessageInfo,
+} from "nodemailer";
+
+interface MailOptions {
+  from: {
+    name: string;
+    address: string;
+  };
+  to: string;
+  subject: string;
+  text: string;
+  html: string;
+}
 
 export const register = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
@@ -39,7 +56,40 @@ export const register = async (req: Request, res: Response) => {
 
   //Create JWT Token
   const token = createToken(newUser);
-  res.json(token);
+
+  //NODEMAILER
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+      user: process.env.EMAIL_ADDRESS,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const mailOptions: MailOptions = {
+    from: {
+      name: "Propriedade Name",
+      address: "t30238897@gmail.com",
+    }, // sender address
+    to: "goyeno5863@aseall.com", // list of receivers
+    subject: "Hello ✔", // Subject line
+    text: "Hello world?", // plain text body
+    html: `http://localhost:5003/api/v1/auth${token}`, // html body
+  };
+
+  const sendMail = async (
+    trans: NodeMailerTransporter,
+    options: MailOptions
+  ) => {
+    await transporter.sendMail(options);
+    console.log("deu?");
+  };
+  await sendMail(transporter, mailOptions);
+  res.json(newUser);
 };
 
 export const login = async (req: Request, res: Response) => {

@@ -6,10 +6,11 @@
 
 <!-- Crie uma rota para registrar novos usuários. -->
 <!-- Quando um novo usuário se registra, crie um novo documento de usuário com o email e a senha fornecidos (certifique-se de fazer hash da senha antes de armazená-la). -->
-
 <!-- Gere um token JWT -->
 
-envie um email de verificação para o usuário com o token no link.
+<!-- Envie um email de verificação para o usuário com o token no link. -->
+
+Colocar a função de enviar email em uma função separada
 
 4 - Verificação de email:
 Crie uma rota que será acionada quando o usuário clicar no link de verificação.
