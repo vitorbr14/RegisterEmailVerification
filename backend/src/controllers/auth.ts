@@ -12,6 +12,9 @@ import {
   SentMessageInfo,
 } from "nodemailer";
 
+interface transporterr {
+  id: string;
+}
 interface MailOptions {
   from: {
     name: string;
@@ -82,7 +85,7 @@ export const register = async (req: Request, res: Response) => {
   };
 
   const sendMail = async (
-    trans: NodeMailerTransporter,
+    trans: NodeMailerTransporter<SentMessageInfo>,
     options: MailOptions
   ) => {
     await transporter.sendMail(options);
