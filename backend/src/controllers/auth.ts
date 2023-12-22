@@ -6,25 +6,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { createToken } from "../utils/createToken";
 import nodemailer from "nodemailer";
-
-import {
-  Transporter as NodeMailerTransporter,
-  SentMessageInfo,
-} from "nodemailer";
-
-interface transporterr {
-  id: string;
-}
-interface MailOptions {
-  from: {
-    name: string;
-    address: string;
-  };
-  to: string;
-  subject: string;
-  text: string;
-  html: string;
-}
+import { sendMail, transporter, MailOptions } from "../utils/sendMail";
 
 export const register = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
@@ -43,13 +25,21 @@ export const register = async (req: Request, res: Response) => {
     throw new BadRequestError("E-mail já cadastrado.");
   }
 
+  // Hash Password
   const hashedPassword = await bcrypt.hash(password, 10);
+
+  //Create random number to email verification
+  const randomEmailCode = () => {
+    return Math.floor(1000 + Math.random() * 9000);
+  };
+  const randomNumber = randomEmailCode();
 
   const newUser = await prisma.user.create({
     data: {
       name,
       email,
       password: hashedPassword,
+      emailCode: randomNumber,
     },
   });
 
@@ -61,36 +51,17 @@ export const register = async (req: Request, res: Response) => {
   const token = createToken(newUser);
 
   //NODEMAILER
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      // TODO: replace `user` and `pass` values from <https://forwardemail.net>
-      user: process.env.EMAIL_ADDRESS,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-
   const mailOptions: MailOptions = {
     from: {
-      name: "Propriedade Name",
+      name: "WebSite",
       address: "t30238897@gmail.com",
     }, // sender address
-    to: "goyeno5863@aseall.com", // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: `http://localhost:5003/api/v1/auth${token}`, // html body
+    to: email,
+    subject: "Codigo de Verificação!",
+    text: `Obrigado por fazer parte da nossa equipe, ${name}!`,
+    html: `Seja bem vindo, ${name}!<br>Seu codigo de verificação é: <h3>${randomNumber}</h3>`, //
   };
 
-  const sendMail = async (
-    trans: NodeMailerTransporter<SentMessageInfo>,
-    options: MailOptions
-  ) => {
-    await transporter.sendMail(options);
-    console.log("deu?");
-  };
   await sendMail(transporter, mailOptions);
   res.json(newUser);
 };

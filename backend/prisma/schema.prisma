@@ -12,8 +12,9 @@ datasource db {
 
 model User {
   id    Int     @id @default(autoincrement())
+  emailCode Int
   email String  @unique
-  name  String?
+  name  String
   password String
   isActivated Boolean @default(false)
   

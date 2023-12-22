@@ -11,6 +11,7 @@
 <!-- Envie um email de verificação para o usuário com o token no link. -->
 
 Colocar a função de enviar email em uma função separada
+Setar o email destino de forma automática
 
 4 - Verificação de email:
 Crie uma rota que será acionada quando o usuário clicar no link de verificação.
