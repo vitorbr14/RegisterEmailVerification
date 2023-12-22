@@ -4,7 +4,7 @@
 
 - 📝 Registro de Usuário com confirmação por e-mail.
 - 🔐 Autenticação segura utilizando Bcrypt e Jsonwebtoken.
-- 📧 Confirmação de e-mail para ativar a conta.
+- 📧 Envio automático de e-mail para ativar a conta.
 - 🔑 Recuperação de senha com envio de e-mail.
 
 ## Tecnologias Utilizadas
