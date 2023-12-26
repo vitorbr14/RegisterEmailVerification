@@ -63,7 +63,7 @@ export const register = async (req: Request, res: Response) => {
   };
 
   await sendMail(transporter, mailOptions);
-  res.json(newUser);
+  res.json({ userData: newUser, token });
 };
 
 export const login = async (req: Request, res: Response) => {

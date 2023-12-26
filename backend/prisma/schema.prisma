@@ -19,3 +19,13 @@ model User {
   isActivated Boolean @default(false)
   
 }
+
+// model Lote {
+//   id    String     @id @default(uuid())
+//   barCode Int @unique
+//   lote String @unique
+//   qnt Int
+//   custoPrice Int
+//   custoVenda Int
+//   inStock Boolean
+// }
