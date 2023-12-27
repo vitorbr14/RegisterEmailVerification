@@ -4,11 +4,16 @@ import "./index.css";
 import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Register from "./pages/Register.tsx";
+import VerifyEmail from "./pages/VerifyEmail.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
+  },
+  {
+    path: "/verify",
+    element: <VerifyEmail />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(

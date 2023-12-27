@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import { BadRequestError } from "../errors/api-errors";
+import { BadRequestError, NotFoundError } from "../errors/api-errors";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { createToken } from "../utils/createToken";
@@ -48,7 +48,7 @@ export const register = async (req: Request, res: Response) => {
   }
 
   //Create JWT Token
-  const token = createToken(newUser);
+  // const token = createToken(newUser);
 
   //NODEMAILER
   const mailOptions: MailOptions = {
@@ -63,9 +63,37 @@ export const register = async (req: Request, res: Response) => {
   };
 
   await sendMail(transporter, mailOptions);
-  res.json({ userData: newUser, token });
+  res.json({ userData: newUser });
 };
 
 export const login = async (req: Request, res: Response) => {
   res.json("Login");
+};
+
+interface IdToNumber {
+  id: number;
+}
+export const verifyEmail = async (req: Request, res: Response) => {
+  const { id: idUsuario } = req.params;
+  const { user_id } = req.body;
+
+  //Find user by the ID
+
+  const user = await prisma.user.findFirst({
+    where: {
+      id: Number(idUsuario),
+    },
+  });
+
+  if (!user) {
+    throw new NotFoundError("Usuário não encontrado");
+  }
+  if (user_id != user.emailCode) {
+    throw new BadRequestError("Código utilizado não está correto.");
+  }
+
+  user.isActivated = true;
+
+  const token = createToken(user);
+  res.json({ user, token });
 };

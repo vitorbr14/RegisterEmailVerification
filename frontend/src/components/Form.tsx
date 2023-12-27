@@ -1,30 +1,219 @@
 import React from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+
+type Inputs = {
+  email: string;
+  exampleRequired: string;
+  name: string;
+  password: string;
+};
 
 const Form = () => {
+  const {
+    register,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(errors);
+  };
+  console.log(errors);
   return (
-    <div className="container md-auto bg-blue-300 h-4 text-cyan-100 h-screen m-auto md:flex">
-      <div className="relative overflow-hidden md:flex w-1/2  bg-blue-500 justify-around items-center hidden"></div>
-      <div className="flex md:w-1/2 justify-center py-10 items-center bg-white">
-        <form action="">
-          <div className="flex flex-col">
-            <small className="text-gray-500">Name</small>
-            <input type="text" className="my-2 border-2 py-1 text-black px-4" />
-          </div>
-          <div className="flex flex-col">
-            <small className="text-gray-500">Email address</small>
-            <input
-              type="email"
-              className="my-2 border-2 py-1 text-black px-4 "
-            />
-          </div>
-          <div className="flex flex-col">
-            <small className="text-gray-500">Password</small>
-            <input
-              type="password"
-              className="my-2 border-2 py-1 text-black px-4"
-            />
-          </div>
-        </form>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+      <div
+        className="
+          flex flex-col
+          bg-white
+          shadow-md
+          px-4
+          sm:px-6
+          md:px-8
+          lg:px-10
+          py-8
+          rounded-3xl
+          w-50
+          max-w-md
+        "
+      >
+        <div className="font-medium self-center text-xl sm:text-3xl text-gray-800">
+          Register Now!
+        </div>
+        <div className="mt-4 self-center text-xl sm:text-sm text-gray-800">
+          Enter your credentials to get access account
+        </div>
+
+        <div className="mt-10">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex flex-col mb-5">
+              <label className="mb-1 text-xs tracking-wide text-gray-600">
+                E-Mail Address:
+              </label>
+              <div className="relative">
+                <div
+                  className="
+                    inline-flex
+                    items-center
+                    justify-center
+                    absolute
+                    left-0
+                    top-0
+                    h-full
+                    w-10
+                    text-gray-400
+                  "
+                >
+                  <i className="fas fa-user text-blue-500"></i>
+                </div>
+
+                <input
+                  id="email"
+                  type="email"
+                  className="
+                    text-sm
+                    placeholder-gray-500
+                    pl-10
+                    pr-4
+                    rounded-2xl
+                    border border-gray-400
+                    w-full
+                    py-2
+                    focus:outline-none focus:border-blue-400
+                  "
+                  placeholder="Enter your E-mail"
+                  {...register("name", { required: true })}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col mb-5">
+              <label className="mb-1 text-xs tracking-wide text-gray-600">
+                Name
+              </label>
+              <div className="relative">
+                <div
+                  className="
+                    inline-flex
+                    items-center
+                    justify-center
+                    absolute
+                    left-0
+                    top-0
+                    h-full
+                    w-10
+                    text-gray-400
+                  "
+                >
+                  <i className="fas fa-at text-blue-500"></i>
+                </div>
+
+                <input
+                  className="
+                    text-sm
+                    placeholder-gray-500
+                    pl-10
+                    pr-4
+                    rounded-2xl
+                    border border-gray-400
+                    w-full
+                    py-2
+                    focus:outline-none focus:border-blue-400
+                  "
+                  placeholder="Enter your name"
+                  {...register("email", { required: true })}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col mb-6">
+              <label className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">
+                Password:
+              </label>
+              <div className="relative">
+                <div
+                  className="
+                    inline-flex
+                    items-center
+                    justify-center
+                    absolute
+                    left-0
+                    top-0
+                    h-full
+                    w-10
+                    text-gray-400
+                  "
+                >
+                  <span>
+                    <i className="fas fa-lock text-blue-500"></i>
+                  </span>
+                </div>
+
+                <input
+                  id="password"
+                  type="password"
+                  className="
+                    text-sm
+                    placeholder-gray-500
+                    pl-10
+                    pr-4
+                    rounded-2xl
+                    border border-gray-400
+                    w-full
+                    py-2
+                    focus:outline-none focus:border-blue-400
+                  "
+                  placeholder="Enter your password"
+                  {...register("password", { required: true })}
+                />
+              </div>
+            </div>
+
+            <div className="flex w-full">
+              <button
+                type="submit"
+                className="
+                  flex
+                  mt-2
+                  items-center
+                  justify-center
+                  focus:outline-none
+                  text-white text-sm
+                  sm:text-base
+                  bg-blue-500
+                  hover:bg-blue-600
+                  rounded-2xl
+                  py-2
+                  w-full
+                  transition
+                  duration-150
+                  ease-in
+                "
+              >
+                <span className="mr-2 uppercase">Sign Up</span>
+                <span></span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div className="flex justify-center items-center mt-6">
+        <a
+          href="#"
+          target="_blank"
+          className="
+            inline-flex
+            items-center
+            text-gray-700
+            font-medium
+            text-xs text-center
+          "
+        >
+          <span className="ml-2">
+            You have an account?
+            <h2 className="text-xs ml-2 text-blue-500 font-semibold">
+              Login here
+            </h2>
+          </span>
+        </a>
       </div>
     </div>
   );
