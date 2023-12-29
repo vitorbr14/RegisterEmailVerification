@@ -1,6 +1,8 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-
+import SubmitButton from "./SubmitButton";
+import Spinner from "./Spinner";
 type Inputs = {
   email: string;
   exampleRequired: string;
@@ -9,6 +11,7 @@ type Inputs = {
 };
 
 const Form = () => {
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -17,9 +20,20 @@ const Form = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(errors);
+    setLoading(true);
+    axios
+      .post("http://localhost:5003/api/v1/auth/register", data)
+
+      .then(function (response) {
+        console.log(response);
+        setLoading(false);
+      })
+      .catch(function (error) {
+        console.error(error);
+        setLoading(false);
+      });
   };
-  console.log(errors);
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <div
@@ -82,7 +96,7 @@ const Form = () => {
                     focus:outline-none focus:border-blue-400
                   "
                   placeholder="Enter your E-mail"
-                  {...register("name", { required: true })}
+                  {...register("email", { required: true })}
                 />
               </div>
             </div>
@@ -120,7 +134,7 @@ const Form = () => {
                     focus:outline-none focus:border-blue-400
                   "
                   placeholder="Enter your name"
-                  {...register("email", { required: true })}
+                  {...register("name", { required: true })}
                 />
               </div>
             </div>
@@ -168,29 +182,7 @@ const Form = () => {
             </div>
 
             <div className="flex w-full">
-              <button
-                type="submit"
-                className="
-                  flex
-                  mt-2
-                  items-center
-                  justify-center
-                  focus:outline-none
-                  text-white text-sm
-                  sm:text-base
-                  bg-blue-500
-                  hover:bg-blue-600
-                  rounded-2xl
-                  py-2
-                  w-full
-                  transition
-                  duration-150
-                  ease-in
-                "
-              >
-                <span className="mr-2 uppercase">Sign Up</span>
-                <span></span>
-              </button>
+              {loading ? <Spinner /> : <SubmitButton />}
             </div>
           </form>
         </div>
