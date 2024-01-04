@@ -15,6 +15,7 @@
 - 🔐 Bcrypt
 - 🔑 Jsonwebtoken
 - 📤 Nodemailer
+- 📝 React Hook Form
 
 ## Licença
 
