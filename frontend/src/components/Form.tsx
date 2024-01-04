@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import SubmitButton from "./SubmitButton";
 import Spinner from "./Spinner";
@@ -11,6 +12,7 @@ type Inputs = {
 };
 
 const Form = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const {
     register,
@@ -27,6 +29,7 @@ const Form = () => {
       .then(function (response) {
         console.log(response);
         setLoading(false);
+        navigate(`/dashboard/${response.data.userData.id}`);
       })
       .catch(function (error) {
         console.error(error);

@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Register from "./pages/Register.tsx";
 import VerifyEmail from "./pages/VerifyEmail.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
 
 const router = createBrowserRouter([
   {
@@ -12,8 +13,12 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: "/verify",
+    path: "/verify/:id",
     element: <VerifyEmail />,
+  },
+  {
+    path: "/dashboard/:userid",
+    element: <Dashboard />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(

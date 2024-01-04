@@ -8,6 +8,21 @@ import { createToken } from "../utils/createToken";
 import nodemailer from "nodemailer";
 import { sendMail, transporter, MailOptions } from "../utils/sendMail";
 
+export const getAllUsers = async (req: Request, res: Response) => {
+  const users = await prisma.user.findMany();
+  res.json(users);
+};
+
+export const getUser = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const user = await prisma.user.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+
+  res.json(user);
+};
 export const register = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 
@@ -59,7 +74,8 @@ export const register = async (req: Request, res: Response) => {
     to: email,
     subject: "Codigo de Verificação!",
     text: `Obrigado por fazer parte da nossa equipe, ${name}!`,
-    html: `Seja bem vindo, ${name}!<br>Seu codigo de verificação é: <h3>${randomNumber}</h3>`, //
+    html: `Seja bem vindo, ${name}!<br>Seu codigo de verificação é: <h3>${randomNumber}</h3><br>
+    Clique aqui para ir para a página de verificação: http://localhost:5173/verify/${newUser.id}`, //
   };
 
   await sendMail(transporter, mailOptions);
@@ -92,8 +108,14 @@ export const verifyEmail = async (req: Request, res: Response) => {
     throw new BadRequestError("Código utilizado não está correto.");
   }
 
-  user.isActivated = true;
+  const updateUser = await prisma.user.update({
+    where: {
+      email: user.email,
+    },
+    data: {
+      isActivated: true,
+    },
+  });
 
-  const token = createToken(user);
-  res.json({ user, token });
+  res.json({ updateUser });
 };

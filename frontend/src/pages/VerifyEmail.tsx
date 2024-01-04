@@ -50,7 +50,7 @@ const VerifyEmail = () => {
 
                 <input
                   id="email"
-                  type="email"
+                  type="number"
                   name="email"
                   className="
                     text-sm
