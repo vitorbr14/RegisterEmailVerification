@@ -185,7 +185,7 @@ const Form = () => {
             </div>
 
             <div className="flex w-full">
-              {loading ? <Spinner /> : <SubmitButton />}
+              {loading ? <Spinner /> : <SubmitButton text={"Sign Up"} />}
             </div>
           </form>
         </div>

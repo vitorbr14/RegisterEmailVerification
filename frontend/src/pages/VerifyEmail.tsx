@@ -1,6 +1,36 @@
 import React from "react";
+import SubmitButton from "../components/SubmitButton";
+import { useParams, useNavigate } from "react-router-dom";
+import { useForm, SubmitHandler } from "react-hook-form";
+import axios from "axios";
+
+type Inputs = {
+  user_id: number;
+};
 
 const VerifyEmail = () => {
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>();
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    axios
+      .patch(`http://localhost:5003/api/v1/auth/verify/${id}`, data)
+
+      .then(function (response) {
+        console.log(response);
+        navigate(`/dashboard/${id}`);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+
+  let { id } = useParams();
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <div
@@ -19,14 +49,14 @@ const VerifyEmail = () => {
         "
       >
         <div className="font-medium self-center text-xl sm:text-3xl text-gray-800">
-          Register Now!
+          Register Now! {id}
         </div>
         <div className="mt-4 self-center text-xl sm:text-sm text-gray-800">
           Enter your credentials to get access account
         </div>
 
         <div className="mt-10">
-          <form action="#">
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col mb-5">
               <label className="mb-1 text-xs tracking-wide text-gray-600">
                 Code:
@@ -51,7 +81,6 @@ const VerifyEmail = () => {
                 <input
                   id="email"
                   type="number"
-                  name="email"
                   className="
                     text-sm
                     placeholder-gray-500
@@ -64,34 +93,13 @@ const VerifyEmail = () => {
                     focus:outline-none focus:border-blue-400
                   "
                   placeholder="Enter your code"
+                  {...register("user_id")}
                 />
               </div>
             </div>
 
             <div className="flex w-full">
-              <button
-                type="submit"
-                className="
-                  flex
-                  mt-2
-                  items-center
-                  justify-center
-                  focus:outline-none
-                  text-white text-sm
-                  sm:text-base
-                  bg-blue-500
-                  hover:bg-blue-600
-                  rounded-2xl
-                  py-2
-                  w-full
-                  transition
-                  duration-150
-                  ease-in
-                "
-              >
-                <span className="mr-2 uppercase">Verify</span>
-                <span></span>
-              </button>
+              <SubmitButton text="Enviar" />
             </div>
           </form>
         </div>

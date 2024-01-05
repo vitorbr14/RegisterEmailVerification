@@ -1,6 +1,9 @@
 import React from "react";
 
-const SubmitButton = () => {
+type textButton = {
+  text?: string;
+};
+const SubmitButton = ({ text }: textButton) => {
   return (
     <button
       type="submit"
@@ -22,7 +25,7 @@ const SubmitButton = () => {
                   ease-in
                 "
     >
-      <span className="mr-2 uppercase">Sign Up</span>
+      <span className="mr-2 uppercase">{text}</span>
     </button>
   );
 };
