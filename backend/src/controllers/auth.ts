@@ -117,5 +117,23 @@ export const verifyEmail = async (req: Request, res: Response) => {
     },
   });
 
+  if (!updateUser) {
+    throw new BadRequestError("Usuário não encontado");
+  }
+
   res.json({ updateUser });
+};
+
+export const deleteUser = async (req: Request, res: Response) => {
+  const { id: IdUsuario } = req.params;
+  const { email } = req.body;
+
+  const deleteUsers = await prisma.user.deleteMany({});
+
+  if (!deleteUser) {
+    throw new BadRequestError("Usuário não encontado");
+  }
+
+  console.log(Number(IdUsuario));
+  res.json("deleteUser");
 };

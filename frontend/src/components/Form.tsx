@@ -29,6 +29,7 @@ const Form = () => {
       .then(function (response) {
         console.log(response);
         setLoading(false);
+        
         navigate(`/dashboard/${response.data.userData.id}`);
       })
       .catch(function (error) {
@@ -36,6 +37,7 @@ const Form = () => {
         setLoading(false);
       });
   };
+console.log(errors);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
@@ -100,7 +102,9 @@ const Form = () => {
                   "
                   placeholder="Enter your E-mail"
                   {...register("email", { required: true })}
+                 
                 />
+                 {errors?.email && <p className="text-xs text-red-600">Please, inform your e-mail</p>}
               </div>
             </div>
             <div className="flex flex-col mb-5">
@@ -139,6 +143,7 @@ const Form = () => {
                   placeholder="Enter your name"
                   {...register("name", { required: true })}
                 />
+                {errors?.name && <p className="text-xs text-red-600">Please, inform your name</p>}
               </div>
             </div>
             <div className="flex flex-col mb-6">
@@ -181,6 +186,7 @@ const Form = () => {
                   placeholder="Enter your password"
                   {...register("password", { required: true })}
                 />
+                {errors?.password && <p className="text-xs text-red-600">Please, inform your password</p>}
               </div>
             </div>
 
