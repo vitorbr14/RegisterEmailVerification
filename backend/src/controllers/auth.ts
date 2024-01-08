@@ -1,28 +1,24 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import { BadRequestError, NotFoundError } from "../errors/api-errors";
+import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors/api-errors";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { createToken } from "../utils/createToken";
 import nodemailer from "nodemailer";
 import { sendMail, transporter, MailOptions } from "../utils/sendMail";
 
+
+
 export const getAllUsers = async (req: Request, res: Response) => {
   const users = await prisma.user.findMany();
   res.json(users);
 };
 
-export const getUser = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const user = await prisma.user.findUnique({
-    where: {
-      id: Number(id),
-    },
-  });
 
-  res.json(user);
-};
+
+
+
 export const register = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 
@@ -62,8 +58,8 @@ export const register = async (req: Request, res: Response) => {
     throw new BadRequestError("Não foi possivel criar um novo usuário.");
   }
 
-  //Create JWT Token
-  // const token = createToken(newUser);
+  // Create JWT Token
+  const token = createToken(newUser);
 
   //NODEMAILER
   const mailOptions: MailOptions = {
@@ -75,11 +71,11 @@ export const register = async (req: Request, res: Response) => {
     subject: "Codigo de Verificação!",
     text: `Obrigado por fazer parte da nossa equipe, ${name}!`,
     html: `Seja bem vindo, ${name}!<br>Seu codigo de verificação é: <h3>${randomNumber}</h3><br>
-    Clique aqui para ir para a página de verificação: <a href="http://localhost:5173/verify/${newUser.id}">Aqui</a>`, //
+    Clique aqui para ir para a página de verificação: <a href="http://localhost:5173/verify/${token}">Aqui</a>`, //
   };
 
   await sendMail(transporter, mailOptions);
-  res.json({ userData: newUser });
+  res.json({ userData: newUser, token });
 };
 
 export const login = async (req: Request, res: Response) => {
@@ -89,40 +85,7 @@ export const login = async (req: Request, res: Response) => {
 interface IdToNumber {
   id: number;
 }
-export const verifyEmail = async (req: Request, res: Response) => {
-  const { id: idUsuario } = req.params;
-  const { user_id } = req.body;
 
-  //Find user by the ID
-
-  const user = await prisma.user.findFirst({
-    where: {
-      id: Number(idUsuario),
-    },
-  });
-
-  if (!user) {
-    throw new NotFoundError("Usuário não encontrado");
-  }
-  if (user_id != user.emailCode) {
-    throw new BadRequestError("Código utilizado não está correto.");
-  }
-
-  const updateUser = await prisma.user.update({
-    where: {
-      email: user.email,
-    },
-    data: {
-      isActivated: true,
-    },
-  });
-
-  if (!updateUser) {
-    throw new BadRequestError("Usuário não encontado");
-  }
-
-  res.json({ updateUser });
-};
 
 export const deleteUser = async (req: Request, res: Response) => {
   const { id: IdUsuario } = req.params;
@@ -137,3 +100,4 @@ export const deleteUser = async (req: Request, res: Response) => {
   console.log(Number(IdUsuario));
   res.json("deleteUser");
 };
+

@@ -17,20 +17,25 @@ const VerifyEmail = () => {
     watch,
     formState: { errors },
   } = useForm<Inputs>();
+
+   let jwtToken = useParams(); 
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     axios
-      .patch(`http://localhost:5003/api/v1/auth/verify/${id}`, data)
+      .patch(`http://localhost:5003/api/v1/auth/verify/${jwtToken}`, data)
+      // é so mandar o token direto
 
       .then(function (response) {
         console.log(response);
-        navigate(`/dashboard/${id}`);
+        
       })
       .catch(function (error) {
         console.error(error);
       });
   };
 
-  let { id } = useParams();
+ 
+  
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <div
@@ -49,7 +54,7 @@ const VerifyEmail = () => {
         "
       >
         <div className="font-medium self-center text-xl sm:text-3xl text-gray-800">
-          Register Now! {id}
+          Register Now! 
         </div>
         <div className="mt-4 self-center text-xl sm:text-sm text-gray-800">
           Enter your credentials to get access account

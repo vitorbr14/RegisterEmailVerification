@@ -17,7 +17,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5003/api/v1/auth/users/${userid}`)
+      .get(`http://localhost:5003/api/v1/auth/users/${userid}`) //enviar JWT ao invés do userID
       .then((data) => {
         setData(data.data);
         console.log(data.data);

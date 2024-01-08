@@ -36,5 +36,5 @@ export const sendMail = async (
   options: MailOptions
 ) => {
   await transporter.sendMail(options);
-  console.log("deu?");
+  console.log("Email Enviado com sucesso");
 };

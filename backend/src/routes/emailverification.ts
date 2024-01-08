@@ -1,8 +1,9 @@
 import express, { Request, Response, Router } from "express";
 import { register, login } from "../controllers/auth";
-import { getUser } from "../controllers/dashboard";
+import { verifyEmail } from "../controllers/verifyEmail";
 
 const router = express.Router();
 
-router.route("/").get(getUser);
+router.route("/").patch(verifyEmail);
+
 export default router;
