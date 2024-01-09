@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import SubmitButton from "../components/SubmitButton";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 
 type Inputs = {
-  user_id: number;
+  userCode: number;
 };
 
+
 const VerifyEmail = () => {
+
+  const [apiError, setapiError] = useState('')
+
   const navigate = useNavigate();
 
   const {
@@ -18,23 +22,35 @@ const VerifyEmail = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-   let jwtToken = useParams(); 
-
+  
+  const retrivedToken = localStorage.getItem('tokenjwt');
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    axios
-      .patch(`http://localhost:5003/api/v1/auth/verify/${jwtToken}`, data)
-      // é so mandar o token direto
+  
 
-      .then(function (response) {
-        console.log(response);
-        
+    console.log(data);
+    
+    axios.patch('http://localhost:5003/api/v1/verify',data, {
+    headers: {
+      Authorization: `Bearer ${retrivedToken}`
+    }
+   })
+    .then(function (response) {
+        navigate("/dashboard");
+       
       })
       .catch(function (error) {
-        console.error(error);
+        const {response} = error
+        setapiError(response.data.message);
+        //ENVIAR O TOKEN
+        
+       
       });
+    
+    
   };
 
- 
+
+
   
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
@@ -98,8 +114,9 @@ const VerifyEmail = () => {
                     focus:outline-none focus:border-blue-400
                   "
                   placeholder="Enter your code"
-                  {...register("user_id")}
+                  {...register("userCode")}
                 />
+                {apiError ? <span className="text-sm text-red-600">{apiError}</span> : ''}
               </div>
             </div>
 

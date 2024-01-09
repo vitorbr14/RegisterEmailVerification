@@ -13,11 +13,11 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: "/verify/:id",
+    path: "/verify",
     element: <VerifyEmail />,
   },
   {
-    path: "/dashboard/:userid",
+    path: "/dashboard",
     element: <Dashboard />,
   },
 ]);

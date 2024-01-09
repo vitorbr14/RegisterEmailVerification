@@ -17,7 +17,7 @@ const user = await prisma.user.findUnique({
 
 //compare email verification codes
 if(userCode != user?.emailCode){
-    throw new BadRequestError('Código errado!')
+    throw new BadRequestError('Código incorreto, tente novamente.')
 }
 
 //change state of isActivated

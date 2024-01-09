@@ -27,10 +27,12 @@ const Form = () => {
       .post("http://localhost:5003/api/v1/auth/register", data)
 
       .then(function (response) {
-        console.log(response);
+        const  {data: {token}} = response
+        localStorage.setItem('tokenjwt', token);
         setLoading(false);
+         navigate("/dashboard");
         
-        navigate(`/dashboard/${response.data.userData.id}`);
+       
       })
       .catch(function (error) {
         console.error(error);

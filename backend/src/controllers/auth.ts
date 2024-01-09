@@ -71,7 +71,7 @@ export const register = async (req: Request, res: Response) => {
     subject: "Codigo de Verificação!",
     text: `Obrigado por fazer parte da nossa equipe, ${name}!`,
     html: `Seja bem vindo, ${name}!<br>Seu codigo de verificação é: <h3>${randomNumber}</h3><br>
-    Clique aqui para ir para a página de verificação: <a href="http://localhost:5173/verify/${token}">Aqui</a>`, //
+    Clique aqui para ir para a página de verificação: <a href="http://localhost:5173/verify/">Aqui</a>`, //
   };
 
   await sendMail(transporter, mailOptions);
