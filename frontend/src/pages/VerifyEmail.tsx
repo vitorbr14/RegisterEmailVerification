@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import SubmitButton from "../components/SubmitButton";
 import { useParams, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { jwtStorage } from "../context/localStorageContext";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 
@@ -22,16 +24,18 @@ const VerifyEmail = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
+  const jwtLocal = useContext(jwtStorage)
   
-  const retrivedToken = localStorage.getItem('tokenjwt');
   const onSubmit: SubmitHandler<Inputs> = (data) => {
   
-
+    
+    console.log(jwtLocal);
+    
     console.log(data);
     
     axios.patch('http://localhost:5003/api/v1/verify',data, {
     headers: {
-      Authorization: `Bearer ${retrivedToken}`
+      Authorization: `Bearer ${jwtLocal}`
     }
    })
     .then(function (response) {
@@ -116,6 +120,7 @@ const VerifyEmail = () => {
                   placeholder="Enter your code"
                   {...register("userCode")}
                 />
+                {errors?.userCode && <p className="text-xs text-red-600">Por favor, insira o codigo de verificação</p>}
                 {apiError ? <span className="text-sm text-red-600">{apiError}</span> : ''}
               </div>
             </div>

@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useContext } from "react";
+import { jwtStorage } from "../context/localStorageContext";
 
 const Dashboard = () => {
   interface Usuario {
@@ -12,14 +14,14 @@ const Dashboard = () => {
     password: string;
   }
 
-  let { userid } = useParams();
+    const jwtLocal = useContext(jwtStorage)
   const [data, setData] = useState<Usuario>();
   const retrivedToken = localStorage.getItem('tokenjwt');
   useEffect(() => {
     axios
       .get(`http://localhost:5003/api/v1/dashboard`, {
         headers:{
-          Authorization: `Bearer ${retrivedToken}`
+          Authorization: `Bearer ${jwtLocal}`
         }
       }) //enviar JWT ao invés do userID
       .then((data) => {
