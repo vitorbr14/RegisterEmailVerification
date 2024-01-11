@@ -1,23 +1,22 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors/api-errors";
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from "../errors/api-errors";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { createToken } from "../utils/createToken";
 import nodemailer from "nodemailer";
 import { sendMail, transporter, MailOptions } from "../utils/sendMail";
-
-
+import { comparePasswords } from "../utils/comparePasswords";
 
 export const getAllUsers = async (req: Request, res: Response) => {
   const users = await prisma.user.findMany();
   res.json(users);
 };
-
-
-
-
 
 export const register = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
@@ -79,13 +78,30 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-  res.json("Login");
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    throw new BadRequestError("Por favor, informe email e senha.");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (!user) {
+    throw new BadRequestError("Por favor, insira os dados corretamente");
+  }
+
+  const isPasswordCorrect = comparePasswords(password, user.password);
+
+  if (!isPasswordCorrect) {
+    throw new UnauthorizedError("Email ou senha incorretos");
+  }
+  const token = createToken(user);
+  res.json({ user, token });
 };
-
-interface IdToNumber {
-  id: number;
-}
-
 
 export const deleteUser = async (req: Request, res: Response) => {
   const { id: IdUsuario } = req.params;
@@ -94,10 +110,9 @@ export const deleteUser = async (req: Request, res: Response) => {
   const deleteUsers = await prisma.user.deleteMany({});
 
   if (!deleteUser) {
-    throw new BadRequestError("Usuário não encontado");
+    throw new BadRequestError("Usuário não encontrado");
   }
 
   console.log(Number(IdUsuario));
   res.json("deleteUser");
 };
-

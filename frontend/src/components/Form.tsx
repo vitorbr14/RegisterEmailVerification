@@ -27,19 +27,19 @@ const Form = () => {
       .post("http://localhost:5003/api/v1/auth/register", data)
 
       .then(function (response) {
-        const  {data: {token}} = response
-        localStorage.setItem('tokenjwt', token);
+        const {
+          data: { token },
+        } = response;
+        localStorage.setItem("tokenjwt", token);
         setLoading(false);
-         navigate("/dashboard");
-        
-       
+        navigate("/dashboard");
       })
       .catch(function (error) {
         console.error(error);
         setLoading(false);
       });
   };
-console.log(errors);
+  console.log(errors);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
@@ -104,9 +104,12 @@ console.log(errors);
                   "
                   placeholder="Enter your E-mail"
                   {...register("email", { required: true })}
-                 
                 />
-                 {errors?.email && <p className="text-xs text-red-600">Please, inform your e-mail</p>}
+                {errors?.email && (
+                  <p className="text-xs text-red-600">
+                    Please, inform your e-mail
+                  </p>
+                )}
               </div>
             </div>
             <div className="flex flex-col mb-5">
@@ -145,7 +148,11 @@ console.log(errors);
                   placeholder="Enter your name"
                   {...register("name", { required: true })}
                 />
-                {errors?.name && <p className="text-xs text-red-600">Please, inform your name</p>}
+                {errors?.name && (
+                  <p className="text-xs text-red-600">
+                    Please, inform your name
+                  </p>
+                )}
               </div>
             </div>
             <div className="flex flex-col mb-6">
@@ -188,7 +195,11 @@ console.log(errors);
                   placeholder="Enter your password"
                   {...register("password", { required: true })}
                 />
-                {errors?.password && <p className="text-xs text-red-600">Please, inform your password</p>}
+                {errors?.password && (
+                  <p className="text-xs text-red-600">
+                    Please, inform your password
+                  </p>
+                )}
               </div>
             </div>
 

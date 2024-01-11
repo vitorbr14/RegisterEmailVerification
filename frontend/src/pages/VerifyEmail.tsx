@@ -10,10 +10,8 @@ type Inputs = {
   userCode: number;
 };
 
-
 const VerifyEmail = () => {
-
-  const [apiError, setapiError] = useState('')
+  const [apiError, setapiError] = useState("");
 
   const navigate = useNavigate();
 
@@ -24,38 +22,29 @@ const VerifyEmail = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const jwtLocal = useContext(jwtStorage)
-  
+  const jwtLocal = useContext(jwtStorage);
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-  
-    
     console.log(jwtLocal);
-    
+
     console.log(data);
-    
-    axios.patch('http://localhost:5003/api/v1/verify',data, {
-    headers: {
-      Authorization: `Bearer ${jwtLocal}`
-    }
-   })
-    .then(function (response) {
+
+    axios
+      .patch("http://localhost:5003/api/v1/verify", data, {
+        headers: {
+          Authorization: `Bearer ${jwtLocal}`,
+        },
+      })
+      .then(function (response) {
         navigate("/dashboard");
-       
       })
       .catch(function (error) {
-        const {response} = error
+        const { response } = error;
         setapiError(response.data.message);
         //ENVIAR O TOKEN
-        
-       
       });
-    
-    
   };
 
-
-
-  
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <div
@@ -74,7 +63,7 @@ const VerifyEmail = () => {
         "
       >
         <div className="font-medium self-center text-xl sm:text-3xl text-gray-800">
-          Register Now! 
+          Register Now!
         </div>
         <div className="mt-4 self-center text-xl sm:text-sm text-gray-800">
           Enter your credentials to get access account
@@ -120,8 +109,16 @@ const VerifyEmail = () => {
                   placeholder="Enter your code"
                   {...register("userCode")}
                 />
-                {errors?.userCode && <p className="text-xs text-red-600">Por favor, insira o codigo de verificação</p>}
-                {apiError ? <span className="text-sm text-red-600">{apiError}</span> : ''}
+                {errors?.userCode && (
+                  <p className="text-xs text-red-600">
+                    Por favor, insira o codigo de verificação
+                  </p>
+                )}
+                {apiError ? (
+                  <span className="text-sm text-red-600">{apiError}</span>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
 

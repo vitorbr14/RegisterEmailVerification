@@ -7,6 +7,7 @@ import Register from "./pages/Register.tsx";
 import VerifyEmail from "./pages/VerifyEmail.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import { LocalStorageProvider } from "./context/localStorageContext.tsx";
+import Login from "./pages/Login.tsx";
 const router = createBrowserRouter([
   {
     path: "/register",
@@ -20,12 +21,15 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <Dashboard />,
   },
+  {
+    path: "/login",
+    element: <Login />,
+  },
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
- <LocalStorageProvider>
-  <RouterProvider router={router} />
- </LocalStorageProvider>
- 
+    <LocalStorageProvider>
+      <RouterProvider router={router} />
+    </LocalStorageProvider>
   </React.StrictMode>
 );
